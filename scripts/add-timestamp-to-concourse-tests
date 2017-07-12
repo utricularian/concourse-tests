@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+timestamp="$(date)"
+
+echo "Appending timestamp ($timestamp) to collection of timestamps (in $OUTPUT_FILE)"
+
+echo "$timestamp" >> $OUTPUT_FILE
+
+echo "DONE"

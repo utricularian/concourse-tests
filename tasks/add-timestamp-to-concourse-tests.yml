@@ -1,0 +1,12 @@
+---
+platform: linux
+
+inputs:
+  - name: concourse-tests
+
+run:
+  path: concourse-tests/scripts/add-timestamp-to-concourse-tests
+
+params:
+  OUTPUT_FILE: concourse-tests/data/timestamps.txt
+

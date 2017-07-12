@@ -1,0 +1,14 @@
+---
+platform: linux
+
+run:
+  path: sh
+  args:
+    - -exc
+    - |
+      whoami
+      env
+      go version
+      find .
+      touch ephemeral-thing
+
