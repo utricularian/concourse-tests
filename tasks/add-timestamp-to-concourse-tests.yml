@@ -7,7 +7,6 @@ image_resource:
 
 inputs:
   - name: concourse-tests
-  - name: concourse-tests-dirty
 
 outputs:
   - name: concourse-tests-dirty

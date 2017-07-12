@@ -4,6 +4,8 @@ set -eux
 
 timestamp="$(date)"
 
+git clone concourse-tests concourse-tests-dirty
+
 echo "$timestamp" >> $OUTPUT_FILE
 
 cd concourse-tests-dirty
