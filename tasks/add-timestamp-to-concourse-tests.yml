@@ -8,6 +8,9 @@ image_resource:
 inputs:
   - name: concourse-tests
 
+outputs:
+  - name: concourse-tests-dirty
+
 run:
   path: concourse-tests/scripts/add-timestamp-to-concourse-tests
 

@@ -5,7 +5,7 @@ resources:
     source:
       uri: git@github.com:utricularian/concourse-tests.git
       branch: master
-      private_key: ((resource-git-read-only))
+      private_key: ((resource-git-read-write))
 
 jobs:
 - name: on-commit-bump-timestamp
@@ -15,5 +15,6 @@ jobs:
       trigger: true
     - task: add-timestamp-to-concourse-tests
       file: concourse-tests/tasks/add-timestamp-to-concourse-tests.yml
-#     - put: concourse-tests
+    - put: concourse-tests
+      params: {repository: concourse-tests-dirty}
 

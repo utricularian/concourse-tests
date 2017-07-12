@@ -4,8 +4,16 @@ set -eux
 
 timestamp="$(date)"
 
-echo "Appending timestamp ($timestamp) to collection of timestamps (in $OUTPUT_FILE)"
+git clone concourse-tests concourse-tests-dirty
 
-echo "$timestamp" >> $OUTPUT_FILE
+pushd concourse-tests-dirty
+  echo "$timestamp" >> $OUTPUT_FILE
 
-echo "DONE"
+  git config --global user.email "autobot@concourse.ci"
+  git config --global user.name "Concourse"
+
+  git add .
+
+  git commit -m "Autocommit from Concourse"
+popd
+
