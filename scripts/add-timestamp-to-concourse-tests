@@ -6,14 +6,14 @@ timestamp="$(date)"
 
 git clone concourse-tests concourse-tests-dirty
 
-pushd concourse-tests-dirty
-  echo "$timestamp" >> $OUTPUT_FILE
+cd concourse-tests-dirty
 
-  git config --global user.email "autobot@concourse.ci"
-  git config --global user.name "Concourse"
+echo "$timestamp" >> $OUTPUT_FILE
 
-  git add .
+git config --global user.email "autobot@concourse.ci"
+git config --global user.name "Concourse"
 
-  git commit -m "Autocommit from Concourse"
-popd
+git add .
+
+git commit -m "Autocommit from Concourse"
 
