@@ -6,9 +6,9 @@ timestamp="$(date)"
 
 git clone concourse-tests concourse-tests-dirty
 
-cd concourse-tests-dirty
-
 echo "$timestamp" >> $OUTPUT_FILE
+
+cd concourse-tests-dirty
 
 git config --global user.email "autobot@concourse.ci"
 git config --global user.name "Concourse"
