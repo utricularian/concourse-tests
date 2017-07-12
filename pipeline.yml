@@ -5,6 +5,12 @@ resources:
     source:
       uri: git@github.com:utricularian/concourse-tests.git
       branch: master
+      private_key: ((resource-git-read-only))
+  - name: concourse-tests-dirty
+    type: git
+    source:
+      uri: git@github.com:utricularian/concourse-tests.git
+      branch: master
       private_key: ((resource-git-read-write))
 
 jobs:
@@ -15,6 +21,5 @@ jobs:
       trigger: true
     - task: add-timestamp-to-concourse-tests
       file: concourse-tests/tasks/add-timestamp-to-concourse-tests.yml
-    - put: concourse-tests
-      params: {repository: concourse-tests-dirty}
+    - put: concourse-tests-dirty
 
