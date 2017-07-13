@@ -5,25 +5,48 @@ resources:
     source:
       uri: git@github.com:utricularian/concourse-tests.git
       branch: master
-      private_key: ((resource-git-read-only))
-  - name: concourse-tests-writeable
-    type: git
-    source:
-      uri: git@github.com:utricularian/concourse-tests.git
-      branch: master
       private_key: ((resource-git-read-write))
+
+  - name: concourse-tests-version
+    type: semver
+    source:
+      driver: git
+      uri: git@github.com:utricularian/concourse-semvers.git
+      branch: master
+      file: concourse-tests.version
+      private_key: ((resource-semver-read-write))
 
 jobs:
 - name: on-commit-bump-timestamp
   plan:
+    - get: concourse-tests-version
+      params:
+        pre: rc
+    - task: display-version
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: {repository: busybox}
+        inputs:
+        - name: concourse-tests-version
+        run:
+          path: cat
+          args: [concourse-tests-version/number]
     - get: concourse-tests
       version: latest
       trigger: true
-    - task: add-timestamp-to-concourse-tests
-      file: concourse-tests/tasks/add-timestamp-to-concourse-tests.yml
-    - task: do-other-stuff-to-concourse-tests
-      file: concourse-tests/tasks/do-other-stuff-to-concourse-tests.yml
-    - put: concourse-tests-writeable
+    - task: sleep-for-a-bit
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: {repository: busybox}
+        run:
+          path: sleep
+          args: [10]
+    - put: concourse-tests-version
       params:
-        repository: concourse-tests-dirty
+        pre: rc
+
 
