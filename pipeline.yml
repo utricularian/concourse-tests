@@ -21,6 +21,8 @@ jobs:
       trigger: true
     - task: add-timestamp-to-concourse-tests
       file: concourse-tests/tasks/add-timestamp-to-concourse-tests.yml
+    - task: do-other-stuff-to-concourse-tests
+      file: concourse-tests/tasks/do-other-stuff-to-concourse-tests
     - put: concourse-tests-dirty
       params:
         repository: concourse-tests-dirty

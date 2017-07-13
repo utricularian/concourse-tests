@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -eux
+
+git clone concourse-tests concourse-tests-dirty
+
+echo "Neat, more stuff" >> $OUTPUT_DIR/
+
+cd concourse-tests-dirty
+
+git config --global user.email "autobot@concourse.ci"
+git config --global user.name "Concourse"
+
+git add .
+
+git commit -m "Autocommit from Concourse"
+
