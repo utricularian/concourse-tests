@@ -4,7 +4,7 @@ set -eux
 
 git clone concourse-tests concourse-tests-dirty
 
-echo "Neat, more stuff" >> $OUTPUT_DIR/
+echo "Neat, more stuff" >> $OUTPUT_DIR/data/timestamps.txt
 
 cd concourse-tests-dirty
 
@@ -13,5 +13,5 @@ git config --global user.name "Concourse"
 
 git add .
 
-git commit -m "Autocommit from Concourse"
+git commit -m "Autocommit #2 from Concourse"
 
