@@ -6,7 +6,7 @@ resources:
       uri: git@github.com:utricularian/concourse-tests.git
       branch: master
       private_key: ((resource-git-read-only))
-  - name: concourse-tests-dirty
+  - name: concourse-tests-writeable
     type: git
     source:
       uri: git@github.com:utricularian/concourse-tests.git
@@ -22,8 +22,8 @@ jobs:
     - task: add-timestamp-to-concourse-tests
       file: concourse-tests/tasks/add-timestamp-to-concourse-tests.yml
     - task: do-other-stuff-to-concourse-tests
-      file: concourse-tests/tasks/do-other-stuff-to-concourse-tests
-    - put: concourse-tests-dirty
+      file: concourse-tests/tasks/do-other-stuff-to-concourse-tests.yml
+    - put: concourse-tests-writeable
       params:
         repository: concourse-tests-dirty
 
