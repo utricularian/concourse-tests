@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -eux
+
+version=$(cat concourse-tests-version/version)
+
+cd concourse-tests-release-candidate
+
+git tag -a "v${version}" -m "Concourse tagged version ${version}"
+

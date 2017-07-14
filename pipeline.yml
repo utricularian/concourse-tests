@@ -4,7 +4,7 @@ resources:
     type: git
     source:
       uri: git@github.com:utricularian/concourse-tests.git
-      branch: master
+      branch: develop
       private_key: ((resource-git-read-write))
 
   - name: concourse-tests-release-candidate
@@ -12,6 +12,13 @@ resources:
     source:
       uri: git@github.com:utricularian/concourse-tests.git
       branch: release-candidate
+      private_key: ((resource-git-read-write))
+
+  - name: concourse-tests-master
+    type: git
+    source:
+      uri: git@github.com:utricularian/concourse-tests.git
+      branch: master
       private_key: ((resource-git-read-write))
 
   - name: concourse-tests-version
@@ -27,12 +34,13 @@ jobs:
 - name: pretend-to-do-stuff
   plan:
     - get: concourse-tests
+      trigger: true
     - task: sleep-for-a-bit
       config:
         platform: linux
         image_resource:
           type: docker-image
-          source: {repository: busybox}
+          source: {repository: concourse/bosh-cli}
         run:
           path: sleep
           args: [10]
@@ -44,21 +52,41 @@ jobs:
         pre: rc
     - get: concourse-tests
       passed: [pretend-to-do-stuff]
+      trigger: true
+      params:
+        fetch: [release-candidate]
+    - put: concourse-tests-release-candidate
+      params:
+        repository: concourse-tests
+    - put: concourse-tests-version
+      params:
+        pre: rc
+
+- name: finalize-release
+  plan:
+    - get: concourse-tests-version
+      params:
+        bump: final
     - get: concourse-tests-release-candidate
-    - task: merge-master-into-rc
+      passed: [promote-to-rc]
+      params:
+        fetch: [master]
+    - task: tag-release
       config:
         platform: linux
         image_resource:
           type: docker-image
-          source: {repository: busybox}
+          source: {repository: concourse/bosh-cli}
         inputs:
-          - name: concourse-tests
+          - name: concourse-tests-version
           - name: concourse-tests-release-candidate
         run:
-          path: concourse-tests/scripts/promote-to-rc
-    - put: concourse-tests-release-candidate
+          path: scripts/tag-release
+    - put: concourse-tests-master
       params:
-        repository: concourse-tests-release-candidate-dirty
+        repository: concourse-tests-release-candidate
     - put: concourse-tests-version
       params:
-        pre: rc
+        bump: final
+
+
