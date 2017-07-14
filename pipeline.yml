@@ -47,15 +47,26 @@ jobs:
 
 - name: bump-minor
   plan:
+    - get: concourse-tests-version
+      trigger: false
     - put: concourse-tests-version
       params:
         bump: minor
         pre: rc
 
+- name: bump-major
+  plan:
+    - get: concourse-tests-version
+      trigger: false
+    - put: concourse-tests-version
+      params:
+        bump: major
+        pre: rc
+
 - name: promote-to-rc
   plan:
     - get: concourse-tests-version
-      trigger: true
+      #trigger: true
       params:
         pre: rc
     - get: concourse-tests
@@ -78,15 +89,20 @@ jobs:
         fetch: [master]
     - get: concourse-tests-version
       passed: [promote-to-rc]
-      params:
-        bump: final
     - put: concourse-tests-master
       params:
         repository: concourse-tests-release-candidate
         tag: concourse-tests-version/version
+        tag_prefix: v
     - put: concourse-tests-version
       params:
         bump: final
+
+- name: create-rc-candidate-for-next-version
+  plan:
+    - get: concourse-tests-version
+      passed: [finalize-release]
+      trigger: true
     - put: concourse-tests-version
       params:
         bump: patch
