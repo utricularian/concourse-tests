@@ -46,3 +46,4 @@ Fri Jul 14 11:21:53 PDT 2017
 This should be in version 1.0.0
 1.0.3 part 1
 This feature should only be in 1.1
+This feature should only be in 1.2
