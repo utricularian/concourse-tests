@@ -72,20 +72,10 @@ jobs:
       passed: [promote-to-rc]
       params:
         bump: final
-    - task: tag-release
-      config:
-        platform: linux
-        image_resource:
-          type: docker-image
-          source: {repository: concourse/bosh-cli}
-        inputs:
-          - name: concourse-tests-version
-          - name: concourse-tests-release-candidate
-        run:
-          path: concourse-tests-release-candidate/scripts/tag-release
     - put: concourse-tests-master
       params:
         repository: concourse-tests-release-candidate
+        tag: concourse-tests-version/version
     - put: concourse-tests-version
       params:
         bump: final
