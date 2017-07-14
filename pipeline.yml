@@ -64,13 +64,14 @@ jobs:
 
 - name: finalize-release
   plan:
-    - get: concourse-tests-version
-      params:
-        bump: final
     - get: concourse-tests-release-candidate
       passed: [promote-to-rc]
       params:
         fetch: [master]
+    - get: concourse-tests-version
+      passed: [promote-to-rc]
+      params:
+        bump: final
     - task: tag-release
       config:
         platform: linux
@@ -81,12 +82,16 @@ jobs:
           - name: concourse-tests-version
           - name: concourse-tests-release-candidate
         run:
-          path: scripts/tag-release
+          path: concourse-tests-release-candidate/scripts/tag-release
     - put: concourse-tests-master
       params:
         repository: concourse-tests-release-candidate
     - put: concourse-tests-version
       params:
         bump: final
+    - put: concourse-tests-version
+      params:
+        bump: patch
+        pre: rc
 
 

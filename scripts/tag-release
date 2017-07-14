@@ -6,5 +6,9 @@ version=$(cat concourse-tests-version/version)
 
 cd concourse-tests-release-candidate
 
+
+git config --global user.email "autobot@concourse.ci"
+git config --global user.name "Concourse"
+
 git tag -a "v${version}" -m "Concourse tagged version ${version}"
 
