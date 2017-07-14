@@ -7,6 +7,13 @@ resources:
       branch: master
       private_key: ((resource-git-read-write))
 
+  - name: concourse-tests-release-candidate
+    type: git
+    source:
+      uri: git@github.com:utricularian/concourse-tests.git
+      branch: release-candidate
+      private_key: ((resource-git-read-write))
+
   - name: concourse-tests-version
     type: semver
     source:
@@ -17,25 +24,9 @@ resources:
       private_key: ((resource-semver-read-write))
 
 jobs:
-- name: on-commit-bump-timestamp
+- name: pretend-to-do-stuff
   plan:
-    - get: concourse-tests-version
-      params:
-        pre: rc
-    - task: display-version
-      config:
-        platform: linux
-        image_resource:
-          type: docker-image
-          source: {repository: busybox}
-        inputs:
-        - name: concourse-tests-version
-        run:
-          path: cat
-          args: [concourse-tests-version/number]
     - get: concourse-tests
-      version: latest
-      trigger: true
     - task: sleep-for-a-bit
       config:
         platform: linux
@@ -45,8 +36,29 @@ jobs:
         run:
           path: sleep
           args: [10]
+
+- name: promote-to-rc
+  plan:
+    - get: concourse-tests-version
+      params:
+        pre: rc
+    - get: concourse-tests
+      passed: [pretend-to-do-stuff]
+    - get: concourse-tests-release-candidate
+    - task: merge-master-into-rc
+      config:
+        platform: linux
+        image_resource:
+          type: docker-image
+          source: {repository: busybox}
+        inputs:
+          - name: concourse-tests
+          - name: concourse-tests-release-candidate
+        run:
+          path: concourse-tests/scripts/promote-to-rc
+    - put: concourse-tests-release-candidate
+      params:
+        repository: concourse-tests-release-candidate-dirty
     - put: concourse-tests-version
       params:
         pre: rc
-
-

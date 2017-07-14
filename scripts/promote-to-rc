@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -eux
+
+cd concourse-tests-release-candidate
+
+git merge ../concourse-tests
+
+cd -
+
+git clone concourse-tests-release-candidate concourse-tests-release-candidate-dirty
+
+
