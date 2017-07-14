@@ -45,9 +45,17 @@ jobs:
           path: sleep
           args: [10]
 
+- name: bump-minor
+  plan:
+    - put: concourse-tests-version
+      params:
+        bump: minor
+        pre: rc
+
 - name: promote-to-rc
   plan:
     - get: concourse-tests-version
+      trigger: true
       params:
         pre: rc
     - get: concourse-tests
