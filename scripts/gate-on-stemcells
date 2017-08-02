@@ -1,6 +1,8 @@
 #!/bin/bash
 
-CWD=$(PWD)
+set -eux
+
+CWD=$(pwd)
 
 aws=$(cat "${CWD}/aws-bosh-stemcell/version")
 gcp=$(cat "${CWD}/gcp-bosh-stemcell/version")
