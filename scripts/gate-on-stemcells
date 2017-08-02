@@ -1,0 +1,16 @@
+#!/bin/bash
+
+CWD=$(PWD)
+
+aws=$(cat "${CWD}/aws-bosh-stemcell/version")
+gcp=$(cat "${CWD}/gcp-bosh-stemcell/version")
+boshlite=$(cat "${CWD}/bosh-lite-stemcell/version")
+
+if [[ "${aws}" != "${gcp}" || "${aws}" != "${boshlite}" ]]; then
+	echo "You shall not pass"
+	exit 1
+fi
+
+
+
+
