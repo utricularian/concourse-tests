@@ -9,7 +9,7 @@ gcp=$(cat "${CWD}/gcp-bosh-stemcell/version")
 boshlite=$(cat "${CWD}/bosh-lite-stemcell/version")
 
 if [[ "${aws}" != "${gcp}" || "${aws}" != "${boshlite}" ]]; then
-	set +e
+	set +x
 	echo "Not all stemcells are on the same version"
 	echo "aws=${aws}"
 	echo "gcp=${gcp}"
