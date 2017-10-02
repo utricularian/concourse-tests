@@ -1,0 +1,5 @@
+#!/bin/bash
+
+git clone $INPUT_REPO $OUTPUT_REPO
+
+sleep 10
