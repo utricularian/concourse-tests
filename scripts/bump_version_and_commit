@@ -1,6 +1,10 @@
 #!/bin/bash
 
-REPO=pretend-mysql-repo/
+OLD_REPO=pretend-mysql-repo
+REPO="${OLD_REPO}-output"
+
+git clone $OLD_REPO $REPO
+
 expr $(cat "$REPO/version") + 1 > "$REPO/version.new"
 mv "$REPO/version.new" "$REPO/version"
 
@@ -11,3 +15,4 @@ pushd $REPO
   git add version
   git commit -m "Autoincrement version"
 popd
+
