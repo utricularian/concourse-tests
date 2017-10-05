@@ -1,0 +1,38 @@
+#!/bin/bash
+
+#
+# This script exists because pushing to a tag via Concourse gets complicated
+# when there are commits later than the commit needing the tag. Instead we
+# opted to manually run the tagging commands to get around Concourse
+# limitations.
+#
+
+set -eux
+
+REPOSITORY="${REPOSITORY:?}"
+TAG="${TAG:?}"
+TAG_PREFIX="${TAG_PREFIX:-''}"
+GIT_PRIVATE_KEY="${GIT_PRIVATE_KEY:?}"
+
+SSH_DIR=$HOME/.ssh
+SSH_KEY=${SSH_DIR}/id_rsa_github
+
+mkdir -p ${SSH_DIR}
+echo -e "Host *\n\tStrictHostKeyChecking no\n\tUserKnownHostsFile=/dev/null" >> $SSH_DIR/config
+echo -n "${GIT_PRIVATE_KEY}" > "${SSH_KEY}"
+chmod 0600 "${SSH_KEY}"
+
+eval $(ssh-agent)
+ssh-add "${SSH_KEY}"
+
+git config --global user.email "core-services-bot@pivotal.io"
+git config --global user.name "Final Release Builder"
+
+TAG_BASE=$(cat $TAG)
+FULL_TAG_NAME="${TAG_PREFIX}${TAG_BASE}"
+
+pushd $REPOSITORY
+  git tag ${FULL_TAG_NAME}
+  git push origin --tags
+popd
+

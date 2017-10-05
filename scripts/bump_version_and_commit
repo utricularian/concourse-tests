@@ -1,0 +1,18 @@
+#!/bin/bash
+
+OLD_REPO=pretend-mysql-repo
+REPO="${OLD_REPO}-output"
+
+git clone $OLD_REPO $REPO
+
+expr $(cat "$REPO/version") + 1 > "$REPO/version.new"
+mv "$REPO/version.new" "$REPO/version"
+
+pushd $REPO
+  git config --global user.email "core-services-bot@pivotal.io"
+  git config --global user.name "Final Release Builder"
+
+  git add version
+  git commit -m "Autoincrement version"
+popd
+
